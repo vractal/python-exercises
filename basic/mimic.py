@@ -29,7 +29,7 @@ up what words might come next and pick one at random as
 the next work.
 Use the empty string as the first word to prime things.
 If we ever get stuck with a word that is not in the dict,
-go back to the empty string to keep things moving.
+go back to the empty string to keep things moving.e
 
 Note: the standard python module 'random' includes a
 random.choice(list) method which picks a random element
@@ -46,15 +46,47 @@ import sys
 
 
 def mimic_dict(filename):
-  """Returns mimic dict mapping each word to list of words which follow it."""
-  # +++your code here+++
-  return
+    """Returns mimic dict mapping each word to list of words which follow it."""
+    # do arquivo, separa cada palavra e coloca numa lista
+    mimic = {}
+    with open(filename) as file:
+      text = file.read()
+
+    words = text.split(" ")
+    mimic[""] = words[0]
+    for i in range(len(words)-1):
+        word = words[i]
+        next = words[i+1]
+        try:
+            mimic[word].append(next)
+        except:
+            mimic[word] = [next]
+
+    return mimic
+
 
 
 def print_mimic(mimic_dict, word):
-  """Given mimic dict and start word, prints 200 random words."""
-  # +++your code here+++
-  return
+    """Given mimic dict and start word, prints 200 random words."""
+    # +++your code here+++
+    lista = [word]
+
+    for i in range(200):
+        #printa uma palavra, procura uma random dentro do dicionario, printa, usa essa de base, etc
+        word = lista[-1]
+        try:
+            next = random.choice(mimic_dict[word])
+        except:
+            next = random.choice(mimic_dict[""])
+        lista.append(next)
+
+
+    output_string = ""
+    for wd in lista:
+        output_string += " " + wd
+
+
+    print(output_string)
 
 
 # Provided main(), calls mimic_dict() and mimic()

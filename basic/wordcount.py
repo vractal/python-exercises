@@ -41,6 +41,40 @@ import sys
 
 
 # +++your code here+++
+def get_words(filename):
+
+    with open(filename) as file:
+        text = file.read()
+        words_list = text.split(" ")
+
+    words_dict = {}
+    for word in words_list:
+        try:
+            words_dict[word.lower()] += 1
+        except KeyError:
+            words_dict[word.lower()] = 1
+
+    return words_dict
+
+def print_words(filename):
+    words = get_words(filename)
+    sorted_list = [word for word in words]
+    sorted_list.sort()
+    for word in sorted_list:
+        print(word, words[word])
+
+
+
+def print_top(filename):
+    words = get_words(filename)
+    top = sorted(words.items(),key=lambda x:x[1])
+    top.reverse()
+    top_20 = top[:20] if len(top) >20 else top[:len(top)]
+    for tp in top_20:
+        print (tp[0],tp[1])
+
+
+
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.

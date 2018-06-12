@@ -23,6 +23,34 @@ import subprocess
 
 # +++your code here+++
 # Write functions and modify main() to call them
+def get_special_paths(dir):
+    dir = os.path.abspath(dir)
+    paths = []
+    for file in os.listdir(dir):
+        if re.match(r'.*__[^_]*__.*',file):
+            paths.append(os.path.join(dir,file))
+
+    return paths
+
+def copy_to(paths,dir):
+    dir = os.path.abspath(dir)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    for path in paths:
+        shutil.copy(path,dir)
+    return True
+
+
+def zip_to(paths, zip):
+    command = "zip -j " + zip
+    for path in paths:
+        command += " " + path
+    subprocess.call(command,shell=True)
+
+
+
+
+
 
 
 def main():
@@ -39,12 +67,12 @@ def main():
     # todir and tozip are either set from command line
     # or left as the empty string.
     # The args array is left just containing the dirs.
-    todir = ''
+    todir = ""
     if args[0] == '--todir':
         todir = args[1]
         del args[0:2]
 
-    tozip = ''
+    tozip = ""
     if args[0] == '--tozip':
         tozip = args[1]
         del args[0:2]
@@ -55,6 +83,20 @@ def main():
 
         # +++your code here+++
         # Call your functions
+
+    special_paths = []
+    for arg in args:
+        special_paths += get_special_paths(arg)
+
+    if todir:
+        copy_to(special_paths,todir)
+    elif tozip:
+        zip_to(special_paths,tozip)
+    else:
+        print(special_paths)
+
+
+
 
 
 if __name__ == "__main__":
